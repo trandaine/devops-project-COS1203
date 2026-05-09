@@ -58,7 +58,8 @@ COPY --from=builder /app/ .
 # (If you had a build step, you would copy the 'dist' folder  instead)  
 # COPY --from=builder /app/dist ./dist  
 # Expose the port the app listens on (check your app's code, e.g.,  server.js)  
-EXPOSE 3006  
+EXPOSE 8080  
+# EXPOSE 3006  
  
 # The command to run the application (check your package.json 'start' script)  
 CMD [ "npm", "start" ] 
