@@ -84,11 +84,11 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/devops-backend-COS1203:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/devops-backend-cos1203:latest
 
       - name: Build and Push Frontend
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/devops-frontend-COS1203:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/devops-frontend-cos1203:latest
