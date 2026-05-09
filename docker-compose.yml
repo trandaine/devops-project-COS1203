@@ -37,22 +37,60 @@
 #      retries: 5
 # ===========================================
 
-version: '3.8'
+# version: '3.8'
 
 services:
   # STUDENT TODO: Define frontend service
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: devops-frontend
+    ports:
+      - 3005:3000
+    depends_on:
+      - backend
+
     # TODO: Add ports, depends_on
 
   # STUDENT TODO: Define backend service
   backend:
-    build: ./backend
-    # TODO: Add ports, environment, depends_on, healthcheck
+    # build: ./backend
+    # # TODO: Add ports, environment, depends_on, healthcheck
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: devops-backend
+    ports:
+      - 8085:8080
+    environment:
+      - DB_USER=postgres
+      - DB_PASSWORD=12345678
+      - DB_HOST=host.docker.internal
+      - DB_PORT=5432
+      - DB_NAME=postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
 
   # STUDENT TODO: Define postgres service
   postgres:
     image: postgres:15-alpine
+    container_name: devops-database
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345678
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/database.sql:/docker-entrypoint-initdb.d/database.sql
+    ports:
+      - 5434:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     # TODO: Add environment, ports, volumes, healthcheck
 
 # STUDENT TODO: Define named volumes
